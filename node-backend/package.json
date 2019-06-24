@@ -1,0 +1,33 @@
+{
+  "name": "facebook-clone-backend",
+  "version": "1.0.0",
+  "description": "Facebook clone backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Facebook",
+    "clone",
+    "nodejs",
+    "express",
+    "rest",
+    "react"
+  ],
+  "author": "Mathias Haugsbø",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "connect-busboy": "0.0.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "knex": "^0.17.6",
+    "morgan": "^1.9.1",
+    "mysql2": "^1.6.5",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "sharp": "^0.22.1"
+  }
+}
