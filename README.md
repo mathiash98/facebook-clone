@@ -37,7 +37,7 @@ The Project was fun to do and made me combine my previous knowledge about image 
 * [Express](https://expressjs.com/) - REST API
 * [Socket.io](https://socket.io/) - Live chat messages
 * [MariaDB](https://mariadb.org/) - For all relational text data
-* [MongoDB](https://mongodb.org/) - To emulate a s3 bucket or similar, used for images because the mongodb-native driver supports streaming. I chosed to save in database instead of on filesystem because I think that is more real life realistic, where one saves the file in Azure Bucket or s3 storage or whatever those services are called.
+* [MongoDB](https://mongodb.org/) - To emulate a s3 bucket or similar, used for images. I chosed to save in database instead of on filesystem because I think that is more realistic in for future products, where you need backups and or saves the file in Azure Bucket or s3 storage or whatever those services are called.
 
 ## Features
 - Real time chat with socket.io
@@ -56,8 +56,6 @@ The Project was fun to do and made me combine my previous knowledge about image 
 ## Getting Started
 
 ### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
 * [NodeJS](https://nodejs.org/en/)
 * [MariaDB](https://downloads.mariadb.org/) or similar sql database
 * [MongoDB](https://www.mongodb.com/download-center/community) for storing images
