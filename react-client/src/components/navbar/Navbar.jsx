@@ -13,13 +13,13 @@ export default function NavigationBar() {
     return (
         <Navbar bg="light" expand="md">
             <Navbar.Brand><Link to="/">Home</Link></Navbar.Brand>
-            <Search inline></Search>
+            <Search></Search>
             <Navbar.Toggle aria-controls="navbar-nav" />
             <Navbar.Collapse id="navbar-nav">
-                <Nav className="mr-auto">
-                    <Nav.Item><Link to="/">Home</Link></Nav.Item>
-                    <Nav.Item><Link to={"/profile/"+user.id}>Profile</Link></Nav.Item>
-                    {user.isLoggedIn ? <Nav.Item onClick={user.logout}><Link to=' '>Log out</Link></Nav.Item> : <Nav.Item><Link to="/">login</Link></Nav.Item>}
+                <Nav className="justify-content-end">
+                    <Nav.Item><Link to="/" className="nav-link">Home</Link></Nav.Item>
+                    <Nav.Item><Link to={"/profile/"+user.id} className="nav-link">Profile</Link></Nav.Item>
+                    {user.isLoggedIn ? <Nav.Item onClick={user.logout}><Link to=' ' className="nav-link">Log out</Link></Nav.Item> : <Nav.Item><Link to="/" className="nav-link">login</Link></Nav.Item>}
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

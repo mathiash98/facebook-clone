@@ -7,13 +7,24 @@ const config = require('../config');
 const MongoClient = mongodb.MongoClient;
 
 let gfs;
-
-MongoClient.connect(config.db.mongodb.uri, function(err, client) {
-    if(err) console.error(err);
-    console.log("Connected successfully to server");
-  
-    const db = client.db(config.db.mongodb.dbName);
-    gfs = new mongodb.GridFSBucket(db);
+MongoClient.connect(config.db.mongodb.uri, {
+    useNewUrlParser: true,
+    poolSize: 10,
+    autoReconnect: true,
+    // retry to connect for 60 times
+    reconnectTries: 60,
+    // wait 1 second before retrying
+    reconnectInterval: 1000
+}, function(err, client) {
+    if(err) {
+        console.error(err);
+    } else {
+        console.log('Connected to mongodb');
+        if (client) {
+            const db = client.db(config.db.mongodb.dbName);
+            gfs = new mongodb.GridFSBucket(db);
+        }
+    }
 });
 
 

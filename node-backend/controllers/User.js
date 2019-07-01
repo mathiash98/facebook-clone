@@ -37,7 +37,7 @@ const User = {
         
         q.from('users AS u')
         q.where(builder)
-        console.log(q.toString());
+        // console.log(q.toString());
         return q;
     },
     

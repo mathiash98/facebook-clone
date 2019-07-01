@@ -1,8 +1,8 @@
 import React from 'react'
 import { Card, Form, Container, Row, Col, Button } from 'react-bootstrap';
-import Avatar from '../avatar/Avatar';
 
 import './postComposer.css';
+
 import useForm from '../hooks/useForm';
 import AuthHelper from '../../utils/AuthHelper';
 
@@ -42,17 +42,18 @@ export default function PostComposer(props) {
         });
     }
     return (
-        <Card>
+        <Card className="postComposer">
             <Card.Header>Write a new post</Card.Header>
             <Card.Body>
-                <Form inline onSubmit={handleSubmit}>
+                <Form onSubmit={handleSubmit}>
                 <Container>
                     <Row>
                         <Col xs={12}>
                             <Form.Control as="textarea" rows="3" name="text"
                                 placeholder="What is on your mind?"
                                 onChange={handleChange}
-                                value={values.text}/>
+                                value={values.text}
+                                className="postComposer-input-text"/>
                             <Form.Control name="img"
                                 type="file"
                                 multiple
@@ -61,7 +62,7 @@ export default function PostComposer(props) {
                         </Col>
                     </Row>
                     <Row>
-                        <Col xs={{offset: 2}}>
+                        <Col>
                             <Button type="submit">Share</Button>
                         </Col>
                     </Row>
