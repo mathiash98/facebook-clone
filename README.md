@@ -5,6 +5,8 @@
 
 * [About the Project](#about-the-project)
   * [Built With](#built-with)
+  * [Features](#features)
+  * [Roadmap](#roadmap)
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
@@ -51,6 +53,15 @@ The Project was fun to do and made me combine my previous knowledge about image 
 - Images are processed with sharpjs to make large, medium and small copies in mongodb gridFsBucket
 - Dedicated space to ads, have to make the investors happy.
 - Passwords are encrypted with bcrypt of course.
+
+## roadmap
+Things that I will add if I decide to spend more time on this:
+- [ ] Group messages
+- [ ] Friend requests, now the friend requests are automatically added
+- [ ] Automatically open chat window when a friend sends message to you
+- [ ] Notify user on new posts, likes, comments
+- [ ] Comments on posts, needs front-end
+
 
 <!-- GETTING STARTED -->
 ## Getting Started
