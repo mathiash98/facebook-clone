@@ -20,22 +20,24 @@ const User = {
      * @returns {Knex.QueryBuilder<User, {}>}
      */
     find: function (query) {
-        let q = knex.select('id', 'first_name', 'last_name', 'birth', 'created_at', 'admin');
+        let q = knex.select('u.id', 'u.first_name', 'u.last_name', 'u.birth', 'u.created_at', 'u.admin', 'u.avatar');
         let builder = {};
         if (query) {
-            if (query.id) builder.id = query.id;
-            if (query.first_name) builder.first_name = query.first_name;
-            if (query.last_name) builder.last_name = query.last_name;
-            if (query.email) builder.email = query.email;
-            if (query.admin) builder.admin = query.admin;
+            if (query.q) q.whereRaw('MATCH(u.first_name, u.last_name) AGAINST(? IN BOOLEAN MODE)', [(query.q+'*').replace(' ', '* ')]); // Free text search
+            if (query.id) q.where('u.id', query.id);
+            if (query.first_name) q.where('u.first_name', query.first_name);
+            if (query.last_name) q.where('u.last_name', query.last_name);
+            if (query.email) q.where('u.email', query.email);
+            if (query.admin) q.where('u.admin', query.admin);
+            if (query.reqUserId) q.select(knex.raw('EXISTS(SELECT friend_id FROM friends WHERE friend_id = u.id AND user_id = ?) AS friend', [query.reqUserId]));
             
-            if (query.limit) q.limit(query.limit);
+            (query.limit ? q.limit(query.limit) : q.limit(10));
             if (query.orderBy) q.orderBy(query.orderBy);
         }
         
-        q.from('users')
+        q.from('users AS u')
         q.where(builder)
-        
+        console.log(q.toString());
         return q;
     },
     
@@ -67,13 +69,29 @@ const User = {
                             birth: data.birth,
                             password: hash
                         };
-                        knex('users')
-                        .insert(newUser)
-                        .then((result) => {
-                            console.log(result);
-                            resolve(result[0]);
+                        knex.transaction((trx) => {
+                            return trx('users')
+                            .insert(newUser)
+                            .then((ids) => {
+                                const userId = ids[0]; // inserted row id
+                                return trx('friends')
+                                .insert({
+                                    user_id: userId,
+                                    friend_id: userId
+                                })
+                                .then(data => {
+                                    console.log("Friend:", data);
+                                    resolve(userId);
+                                });
+                            })
+
                         })
-                        .catch((err) => {
+                        .then(inserts => {
+                            console.log("Inserts", inserts);
+                            resolve(inserts);
+                        })
+                        .catch(err => {
+                            console.error(err);
                             reject(err);
                         });
                     })
@@ -93,33 +111,9 @@ const User = {
      * @return {promise}
      */
     updateById: function (id, data) {
-        const self = this;
-        return new Promise(async function (resolve, reject) {
-            try {
-                let editedUser = {};
-                if (data.username) {
-                    editedUser.username = data.username;
-                }
-                if (data.email) {
-                    editedUser.email = data.email;
-                }
-                if (data.password) {
-                    editedUser.password = await self.hash(data.password);
-                }
-                if (data.admin) {
-                    editedUser.admin = data.admin;
-                }
-                db.query('UPDATE `user` SET ? WHERE id = ?', [editedUser, id])
-                    .then(function (result) {
-                        resolve(result[0]);
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    });
-            } catch (error) {
-                reject(error);
-            }
-        });
+        return knex('users AS u')
+                .where('u.id', id)
+                .update(data);
     },
 
     /**
@@ -136,92 +130,6 @@ const User = {
                 .catch(error => {
                     reject(error);
                 })
-        });
-    },
-
-    /**
-     * Get followers by userid.
-     * @param {number} id
-     * @return {promise}
-     */
-    getFollowersById: function (id) {
-        return new Promise((resolve, reject) => {
-            const sql = `
-                SELECT u.username AS user_username, u.id AS user_id, f.username AS follower_username, f.id AS follower_id
-                FROM user_follow AS uf
-                JOIN user AS u on u.id = uf.user_id
-                JOIN user AS f on f.id = uf.follow_id
-                WHERE uf.follow_id = ?
-            `;
-            console.log(db.format(sql, id));
-            db.query(sql, id)
-            .then((results, fields) => {
-                resolve(results[0], fields);
-            })
-            .catch(err => {
-                reject(err);
-            })
-        });
-    },
-    
-    /**
-     * Get following by userid.
-     * @param {number} id
-     * @return {promise}
-     */
-    getFollowingById: function (id) {
-        return new Promise((resolve, reject) => {
-            const sql = `
-                SELECT u.username AS user_username, u.id AS user_id, f.username AS follower_username, f.id AS follower_id
-                FROM user_follow AS uf
-                JOIN user AS u on u.id = uf.user_id
-                JOIN user AS f on f.id = uf.follow_id
-                WHERE uf.user_id = ?
-            `;
-            console.log(db.format(sql, id));
-            db.query(sql, id)
-            .then((results, fields) => {
-                resolve(results[0], fields);
-            })
-            .catch(err => {
-                reject(err);
-            })
-        });
-    },
-
-    /**
-     * Follow followId from userId
-     * @param {number} userId 
-     * @param {number} followId 
-     * @return {promise}
-     */
-    follow: function (userId, followId) {
-        return new Promise((resolve, reject) => {
-            db.query('INSERT INTO user_follow SET user_id = ?, follow_id = ?', [userId, followId])
-            .then((results, fields) => {
-                resolve(results, fields);
-            })
-            .catch((err) => {
-                reject(err);
-            })
-        });
-    },
-
-    /**
-     * Unfollow followId from userId
-     * @param {number} userId 
-     * @param {number} followId 
-     * @return {promise}
-     */
-    unfollow: function (userId, followId) {
-        return new Promise((resolve, reject) => {
-            db.query('DELETE FROM user_follow WHERE user_id = ? AND follow_id = ?', [userId, followId])
-            .then((results, fields) => {
-                resolve(results, fields);
-            })
-            .catch((err) => {
-                reject(err);
-            })
         });
     },
 

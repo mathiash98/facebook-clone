@@ -4,8 +4,8 @@ import { useState } from 'react'
  * React hook for form value handling
  * @param submitFunction Callback that get's called onSubmit
  */
-export default function useForm(submitFunction) {
-    const [values, setValues] = useState({});
+export default function useForm(submitFunction, initial) {
+    const [values, setValues] = useState((initial ? initial : {}));
 
     /**
      * Handle change in input element
@@ -14,7 +14,14 @@ export default function useForm(submitFunction) {
     const handleChange = (e) => {
         e.persist();
         const name = e.target.name;
-        const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+        let value;
+        if (e.target.type === 'checkbox') {
+            value = e.target.checked;
+        } else if (e.target.type === 'file') {
+            value = e.target.files;
+        } else {
+            value = e.target.value;
+        }
         setValues( values => ({ ...values, [name]: value}));
     }
     
@@ -27,9 +34,10 @@ export default function useForm(submitFunction) {
         submitFunction();
     }
 
-    return {
+    return [
+        values,
         handleChange,
         handleSubmit,
-        values
-    }
+        setValues
+    ]
 }

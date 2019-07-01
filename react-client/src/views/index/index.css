@@ -1,0 +1,11 @@
+.feed .postCard {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.chatFunction {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding-right: 1vw;
+}

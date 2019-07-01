@@ -1,0 +1,24 @@
+.profile {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+}
+
+#avatar-file-input {
+    display: none;
+}
+
+.avatar-edit {
+    cursor: pointer;
+}
+.avatar-edit-form {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+.avatar-edit-form:hover {
+    opacity: 1;
+}

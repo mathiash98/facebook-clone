@@ -8,13 +8,27 @@ const Img = require('../../controllers/Img');
 // Implement some security
 router.get('/:id', function (req, res) {
     Img.getById(req.params.id)
-    .then((row, field) => {
-        res.setHeader('Content-Type', row.mimetype);
-        res.setHeader('Content-Length', row.size);
-        res.send(row.img);
+    .then(file => {
+        res.set('Content-Type', file.contentType);
+        res.set('Content-Length', file.length);
+        file.downloadStream.on('data', (chunk) => {
+            res.write(chunk);
+        })
+        file.downloadStream.on('error', (err) => {
+            console.error(err)
+            res.status(500).send(err);
+        })
+        file.downloadStream.on('end', () => {
+            res.end();
+        });
     })
-    .catch((error) => {
-        res.status(500).send(error);
+    .catch(err => {
+        if (err) {
+            console.error(err)
+            res.status(500).send(err);
+        } else {
+            res.status(404).send('Could not find image.');
+        }
     });
 });
 

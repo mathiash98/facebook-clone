@@ -1,0 +1,18 @@
+.searchForm {
+    width: 300px;
+    position: relative;
+}
+
+.searchResults {
+    position: absolute;
+    width: 100%;
+    z-index: 50;
+}
+
+.visible {
+    visibility: visible;
+}
+
+.hidden {
+    visibility: hidden;
+}

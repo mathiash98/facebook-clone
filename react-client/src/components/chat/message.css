@@ -1,0 +1,20 @@
+.chat-message {
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    padding-left: 2px;
+    padding-right: 2px;
+    display: block;
+    max-width: 80%;
+}
+
+.receiver {
+    background-color: azure;
+    align-self: start;
+}
+
+.sender {
+    background-color: lightskyblue;
+    align-self: end;
+}

@@ -12,7 +12,8 @@ export class UserProvider extends Component {
             id: null,
             username: '',
             admin: 0,
-            isLoggedIn: false
+            isLoggedIn: false,
+            logout: this.logout
         };
     }
 
@@ -29,6 +30,13 @@ export class UserProvider extends Component {
     componentWillUnmount() {
         // See I'm a good boy and removes the global function on unmount
         global.updateUserContext = undefined;
+    }
+
+    /**
+     * Log out user
+     */
+    logout() {
+        auth.logout();
     }
 
     /**

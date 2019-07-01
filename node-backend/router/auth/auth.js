@@ -46,8 +46,12 @@ router.post('/local-signup', function (req, res) {
         .then(async (id) => {
             User.find({id: id})
             .then(async users => {
-                const token = await jwtSign(users[0]);
-                res.send(token);
+                try {
+                    const token = await jwtSign(users[0]);
+                    res.send(token);
+                } catch (error) {
+                    res.status(500).send(error);
+                }
             })
         })
         .catch((err) => {

@@ -1,17 +1,18 @@
 export default class AuthHelper {
     constructor(domain) {
-        this.domain = domain || "http://localhost:8888";
+        this.domain = domain || window.location.protocol+'//'+window.location.hostname+':8888';
+        console.log(this.domain);
     }
 
     /**
-     * Login with username and password, saves token to localstorage
+     * Login with email and password, saves token to localstorage
      * returns a promise, resolves if success, reject if not success.
      * Returns token or errormessage.
-     * @param {string} username
+     * @param {string} email
      * @param {string} password
      * @returns {Promise<String>} Token on resolve or errormessage on reject
      */
-    login = (username, password) => {
+    login = (email, password) => {
         return new Promise((resolve, reject) => {
             this.fetch('/auth/local-login', {
                 method: "POST",
@@ -19,9 +20,36 @@ export default class AuthHelper {
                     'Content-type': 'Application/json'
                 },
                 body: JSON.stringify({
-                    username,
+                    email,
                     password
                 })
+            })
+            .then(token => {
+                this.setToken(token);
+                global.updateUserContext(); // Update UserContext
+                resolve(token);
+            })
+            .catch(err => {
+                reject(err);
+            });
+        })
+    }
+
+    /**
+     * Register with email, password and data, saves token to localstorage
+     * returns a promise, resolves if success, reject if not success.
+     * Returns token or errormessage.
+     * @param {Object} user
+     * @returns {Promise<String>} Token on resolve or errormessage on reject
+     */
+    register = (user) => {
+        return new Promise((resolve, reject) => {
+            this.fetch('/auth/local-signup', {
+                method: "POST",
+                headers: {
+                    'Content-type': 'Application/json'
+                },
+                body: JSON.stringify(user)
             })
             .then(token => {
                 this.setToken(token);
@@ -165,13 +193,17 @@ export default class AuthHelper {
     _handleFetchPromise = res => {
         if (res.headers) {
             const contentType = res.headers.get('Content-Type');
-            if (contentType.includes('application/json')) {
-                return Promise.all([res.ok, res.json()]);
-            } else if (contentType.includes('image/')){
-                return Promise.all([res.ok, res.blob()]);
-            } else if (contentType.includes('text/')){
+            if (contentType) {
+                if (contentType.includes('application/json')) {
+                    return Promise.all([res.ok, res.json()]);
+                } else if (contentType.includes('image/')){
+                    return Promise.all([res.ok, res.blob()]);
+                } else if (contentType.includes('text/')){
+                    return Promise.all([res.ok, res.text()]);
+                }
+            } else {
                 return Promise.all([res.ok, res.text()]);
-            } 
+            }
         }
     }
 }

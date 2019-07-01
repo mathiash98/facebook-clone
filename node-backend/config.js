@@ -5,6 +5,10 @@ module.exports = {
             user: 'root',
             password: '',
             database: 'facebook-clone'
+        },
+        mongodb: {
+            uri: 'mongodb://localhost:27017',
+            dbName: 'facebook-clone'
         }
     },
     jwt: {

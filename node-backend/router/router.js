@@ -21,6 +21,10 @@ router.use(function (req, res, next) {
      })(req, res, next);
 });
 
+// Parser for multipart/form-data for uploading images to mongodb gfsBucket
+// Have to import it here, after passport to be able to use req.user.id
+router.use(require('../utils/busboyParser'));
+
 router.use('/api', api);
 router.use('/auth', auth);
 

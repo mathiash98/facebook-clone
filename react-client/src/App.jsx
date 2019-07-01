@@ -7,19 +7,23 @@ import Navbar from './components/navbar/Navbar';
 
 // Views
 import Index from './views/index/Index';
-import Chat from './views/chat/Chat';
+import Profile from './views/profile/Profile';
+
+import { UserProvider } from './context/UserContext';
+import FriendList from './components/chat/FriendList';
 
 function App() {
   return (
     <Router>
-    <div>
-      <header>
-        <Navbar></Navbar>
-      </header>
+      <UserProvider>
+        <header>
+          <Navbar></Navbar>
+        </header>
 
-      <Route path="/" exact component={Index} />
-      <Route path="/chat/" component={Chat} />
-    </div>
+        <Route path="/" exact component={Index} />
+        <Route path="/profile/:userId" component={Profile} />
+        <FriendList/>
+      </UserProvider>
   </Router>
   );
 }

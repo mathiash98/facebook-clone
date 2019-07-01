@@ -5,6 +5,7 @@ const router = express.Router();
 
 const User = require('../../controllers/User');
 const Post = require('../../controllers/Post');
+const Friend = require('../../controllers/Friend');
 
 const auth = require('../utilities/authMiddleware');
 
@@ -33,10 +34,60 @@ router.post('/', auth.isAdmin, function (req, res) {
     });
 });
 
+// Friends
+router.get(['/:id/friend', '/friend'], auth.isLoggedIn, function (req, res) {
+    // Get all friends
+    // if req.params.id -> get friends of that user
+    // else get friends of req.user.id
+    console.log('get friends==================');
+    Friend.findByUserId((req.params.id ? req.params.id : req.user.id))
+    .then(friends => {
+        console.log(friends);
+        console.log('==============done==================');
+        res.json(friends);
+    })
+    .catch(err => {
+        res.status(500).send(err);
+    });
+});
+
+router.post('/:id/friend', auth.isLoggedIn, function (req, res) {
+    Friend.save(req.user.id, req.params.id)
+    .then(result => {
+        res.send(result);
+    })
+    .catch(err => {
+        res.status(500).send(err);
+    });
+});
+
+router.post('/:id/avatar', auth.isLoggedIn, function (req, res) {
+    console.log(req.body);
+    User.updateById(req.user.id, {avatar: req.body._images[0].small.toString()})
+    .then(results => {
+        console.log(results);
+        res.sendStatus(200);
+    })
+    .catch(err => {
+        console.error(err);
+        res.status(500).send(err);
+    });
+});
+
+router.delete('/:id/friend', auth.isLoggedIn, function (req, res) {
+    Friend.delete(req.user.id, req.params.id)
+    .then(result => {
+        res.send('Successfully removed friendship');
+    })
+    .catch(err => {
+        res.status(500).send(err);
+    });
+});
+
 router.get('/:id', function (req, res) {
-    User.find({id: req.params.id})
+    User.find({id: req.params.id, reqUserId: req.user.id})
     .then(data => {
-        res.json(data);
+        res.json(data[0]);
     })
     .catch(err => {
         res.status(500).send(err);
@@ -86,57 +137,6 @@ router.delete('/:id', auth.isLoggedIn, function (req, res) {
     } else {
         res.status(401).send("You are not allowed to delete this user.");
     }
-});
-
-router.get('/:id/followers', function (req, res) {
-    // TODO: fix this
-    User.getFollowersById(req.params.id)
-    .then((results, fields) => {
-        res.json(results);
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).send(err); 
-    });
-});
-
-router.get('/:id/following', function (req, res) {
-    // TODO: fix this
-    User.getFollowingById(req.params.id)
-    .then((results, fields) => {
-        res.json(results);
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).send(err); 
-    });
-});
-
-router.post('/:id/follow', auth.isLoggedIn, function (req, res) {
-    User.follow(req.user.id, req.params.id)
-    .then((results, fields) => {
-        console.log(results, fields);
-        res.json(results[0]);
-    })
-    .catch(err => {
-        if (err.errno == 1062) {
-            // Already following user
-            res.send('Following.');
-        } else {
-            res.status(500).send(err); 
-        }
-    });
-});
-
-router.post('/:id/unfollow', auth.isLoggedIn, function (req, res) {
-    User.unfollow(req.user.id, req.params.id)
-    .then((results, fields) => {
-        console.log(results, fields);
-        res.json(results[0]);
-    })
-    .catch(err => {
-        res.status(500).send(err); 
-    });
 });
 
 module.exports = router;

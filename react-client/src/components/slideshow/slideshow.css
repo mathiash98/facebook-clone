@@ -1,0 +1,26 @@
+.slideshow {
+    max-width: 100%;
+    position: relative;
+}
+
+.slideshow img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.slideshow .prevImg {
+    position: absolute;
+    top: 45%;
+    left: 1%;
+}
+
+.slideshow .nextImg {
+    position: absolute;
+    top: 45%;
+    right: 1%;
+}
+
+.slideshow .nextImg:hover,
+.slideshow .prevImg:hover {
+    cursor: pointer;
+}

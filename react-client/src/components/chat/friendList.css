@@ -1,0 +1,35 @@
+.friendList .card-body {
+    padding: 2px;
+}
+.friendList .card-body .friendList-item {
+    padding: 2px;
+}
+.friendList-item:hover {
+    cursor: pointer;
+}
+
+.chatFunction {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.chats {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-end;
+}
+
+.friendList {
+    width: 100%;
+    max-width: 200px;
+}
+
+.friend {
+    height: 30px;
+}
+
+.friend div {
+    padding-left: 1px;
+    padding-right: 1px;
+}
