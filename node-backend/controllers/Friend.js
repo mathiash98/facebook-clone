@@ -11,7 +11,7 @@ const Friend = {
         .from('friends AS f')
         .innerJoin('users AS u', 'u.id', 'f.friend_id')
         .orderBy('u.first_name', 'asc');
-        if (query.userId) q.where('f.user_id', query.userId);
+        if (query.userId) q.where('f.user_id', query.userId).orWhere('f.friend_id', query.userId);
         // console.log(q.toString());
         return q;
     },
