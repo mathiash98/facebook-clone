@@ -1,15 +1,14 @@
 .chat {
-    width: 140px;
+    width: 150px;
     border-radius: .25rem;
 }
 
 .chat-header {
-    padding-left: 2px;
-    padding-right: 2px;
-    padding-top: 0px;
-    padding-bottom: 0px;
+    padding: 2px;
     display: flex;
     flex-direction: row;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .chat-header span {
     flex-grow: 1;
@@ -23,8 +22,7 @@
 }
 
 .chat-body {
-    min-height: 200px;
-    max-height: 200px;
+    height: 200px;
     display: flex;
     flex-direction: column;
     padding: 0;
@@ -34,7 +32,6 @@
 .chat-form {
     align-self: end;
     display: flex;
-    padding-bottom: 6px;
 }
 
 .chat-form input {

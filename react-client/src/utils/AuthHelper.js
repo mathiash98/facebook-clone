@@ -1,7 +1,6 @@
 export default class AuthHelper {
     constructor(domain) {
         this.domain = domain || window.location.protocol+'//'+window.location.hostname+':8888';
-        console.log(this.domain);
     }
 
     /**
@@ -75,7 +74,6 @@ export default class AuthHelper {
      * @param {string} token
      */
     setToken = (token) => {
-        console.log('Setting token to local');
         localStorage.setItem('jwt', token);
     }
     

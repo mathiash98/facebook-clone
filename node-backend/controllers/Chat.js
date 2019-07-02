@@ -23,7 +23,7 @@ const Chat = {
             }
         }
         q.orderBy('m.created_at', 'asc');
-        console.log(q.toString());
+        // console.log(q.toString());
         return q;
     },
 

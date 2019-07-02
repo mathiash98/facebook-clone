@@ -1,0 +1,13 @@
+.friendName {
+    overflow: hidden;
+    padding-left: 8px;
+    text-overflow: ellipsis;
+    white-space: nowrap;   
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.friend:hover {
+    background-color: #efefef;
+}

@@ -18,10 +18,6 @@ export default function Slideshow(props) {
         setIdx((newIdx < 0 ? props.images.length-1 : newIdx));
     }
 
-    React.useEffect(() => {
-        console.log(idx);
-    }, [idx]);
-
     return (
         <div className="slideshow">
             <img src={auth.domain+'/api/img/'+props.images[idx]} alt=""/>

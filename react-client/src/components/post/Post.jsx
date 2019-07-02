@@ -87,10 +87,10 @@ export default function Post(props) {
             <Card.Body>
                 <Container>
                     <Row>
-                        <Col xs={2}>
+                        <Col xs={2} style={{paddingRight:0, paddingLeft:0}}>
                             <Avatar imgId={state.avatar}></Avatar>
                         </Col>
-                        <Col xs={10}>
+                        <Col xs={{offset:1}}>
                             <Row>
                                 <h5>{state.first_name} {state.last_name}</h5>
                             </Row>

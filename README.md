@@ -42,7 +42,7 @@ The Project was fun to do and made me combine my previous knowledge about image 
 * [MongoDB](https://mongodb.org/) - To emulate a s3 bucket or similar, used for images. I chosed to save in database instead of on filesystem because I think that is more realistic in for future products, where you need backups and or saves the file in Azure Bucket or s3 storage or whatever those services are called.
 
 ## Features
-- Real time chat with socket.io
+- Real time chat with socket.io. With annoying popup chat when friends message you.
 ![chat.gif]
 
 - Posts with multiple images
@@ -58,7 +58,7 @@ The Project was fun to do and made me combine my previous knowledge about image 
 Things that I will add if I decide to spend more time on this:
 - [ ] Group messages
 - [ ] Friend requests, now the friend requests are automatically added
-- [ ] Automatically open chat window when a friend sends message to you
+- [x] Automatically open chat window when a friend sends message to you
 - [ ] Notify user on new posts, likes, comments
 - [ ] Comments on posts, needs front-end
 

@@ -22,11 +22,10 @@
 
 .friendList {
     width: 100%;
-    max-width: 200px;
+    width: 205px;
 }
 
 .friend {
-    height: 30px;
 }
 
 .friend div {

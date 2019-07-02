@@ -1,7 +1,7 @@
 import React from 'react'
 import AuthHelper from '../../utils/AuthHelper';
 import Friend from './Friend';
-
+import io from 'socket.io-client';
 import './friendList.css';
 import { ListGroup, Card } from 'react-bootstrap';
 import Chat from './Chat';
@@ -12,14 +12,11 @@ export default function FriendList(props) {
     const [ friends, setFriends ] = React.useState([]);
     const [ chats, setChats ] = React.useState([]);
 
-    React.useLayoutEffect(() => {
-        
-        console.log('doing something');
+    React.useEffect(() => {        
         auth.fetch('/api/user/friend', {
             method: 'GET'
         })
         .then(friends => {
-            console.log(friends);
             setFriends(friends);
         })
         .catch(err => {
@@ -27,6 +24,22 @@ export default function FriendList(props) {
         });
 
     }, []);
+
+    React.useEffect(() => {
+        // Subscribe to socketIO chat
+        const socket = io.connect(auth.domain,{
+            query: {
+              token: auth.getToken()
+            }
+          });
+        socket.on('connect', (data) => {
+            socket.emit('subscribeToChats'); // Subscribe to new chat messages
+            socket.on('newChat', (data) => {
+                const friend = friends.filter((friend) => friend.id === data.id)[0];
+                openChat(friend)
+            });
+        });
+    }, [friends]);
 
     function openChat(friend) {
         if (chats.indexOf(friend) === -1) {
@@ -46,7 +59,7 @@ export default function FriendList(props) {
                 {chats.map(friend => <Chat {...friend} key={friend.id} closeChat={e => closeChat(friend)}/>)}
             </div>
             <Card body className="friendList">
-                <h4>Friends</h4>
+                <h4 className="text-center">Friends</h4>
                 <ListGroup variant="flush">
                     {friends.map(friend => (friend.id === auth.getTokenData().id ? '' :
                     <ListGroup.Item onClick={e => openChat(friend)} className="friendList-item" key={friend.id}>

@@ -1,8 +1,8 @@
 .chat-message {
-    border: 1px solid lightgray;
+    border: 1px solid #e3e3e3;
     border-radius: 5px;
-    margin-top: 1px;
-    margin-bottom: 1px;
+    margin-top: 2px;
+    margin-bottom: 2px;
     padding-left: 2px;
     padding-right: 2px;
     display: block;
@@ -10,11 +10,11 @@
 }
 
 .receiver {
-    background-color: azure;
+    background-color: hsl(183, 1%, 98%);
     align-self: start;
 }
 
 .sender {
-    background-color: lightskyblue;
+    background-color: #dbf9ff;
     align-self: end;
 }

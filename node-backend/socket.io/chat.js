@@ -1,15 +1,23 @@
 const rooms = []; // TODO: Replace this with redis database
 
+const activeUsers = {}; // Users which have subscribed to new chats
+
 const Chat = require('../controllers/Chat');
 const Friend = require('../controllers/Friend');
 
 module.exports = function (io, socket) {
+    socket.on('subscribeToChats', function (data) {
+        console.log('Subscribe to chats', socket.user.id);
+        activeUsers[socket.user.id] = socket.id;
+    });
+
     socket.on('/chat/user', function (data) {
         if (data.userId) {
             // Check if socket.user.id is friend with data.userId
             Friend.findByUserId(socket.user.id)
             .then(friends => {
                 if(friends.filter(friend => friend.id === data.userId).length > 0) {
+                    // user is a friend of this socket
                     const roomName = (socket.user.id < data.userId ? socket.user.id+'USERCHAT'+data.userId : data.userId+'USERCHAT'+socket.user.id);
                     if (!rooms.includes(roomName)) {
                         rooms.push(roomName);
@@ -35,6 +43,13 @@ module.exports = function (io, socket) {
             // Required data values is supplied
             if(Object.keys(socket.rooms).indexOf(data.roomName) >= 0) {
                 // User is in the room it want's to send to
+                // Notify receiver that a user sent them a message (if they aren't in the room)
+                const roomClients = io.sockets.adapter.rooms[data.roomName].sockets;
+                console.log(roomClients);
+                const receiverId = activeUsers[data.to];
+                if (receiverId && Object.keys(roomClients).indexOf(receiverId) === -1) {
+                    io.to(receiverId).emit('newChat', {id: socket.user.id});
+                }
                 // Save chat message to db
                 Chat.save(socket.user.id, data.to, data.message)
                 .then(ids => {
@@ -46,6 +61,7 @@ module.exports = function (io, socket) {
                         created_at: Date.now(),
                         id: ids[0] // Id of message from db
                     });
+
                 })
                 .catch(err => {
                     socket.emit('new error', 'Unable to send chat message.');

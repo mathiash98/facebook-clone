@@ -12,10 +12,8 @@ router.get('/:friendId', auth.isLoggedIn, function (req, res) {
     Friend.findByUserId(req.params.friendId)
             .then(friends => {
                 if(friends.filter(friend => friend.id == req.params.friendId).length > 0) {
-                    console.log('Have friends');
                     Chat.find({userId: req.user.id, friendId: req.params.friendId})
                     .then((results) => {
-                        console.log('Got chat', results);
                         res.json(results);
                     })
                     .catch(err => {

@@ -27,8 +27,6 @@ export default function Chat(props) {
             method: 'GET'
         })
         .then(messages => {
-            console.log(messages);
-            setMessages(messages);
             setState(s => {
                 return {
                     ...s,
@@ -36,6 +34,7 @@ export default function Chat(props) {
                     loaded: true
                 }
             });
+            setMessages(messages);
         })
         .catch(err => {
             console.error(err);
@@ -53,8 +52,6 @@ export default function Chat(props) {
         // Scroll to bottom on chat, when new message is sent
         console.log('Scroll to bottom');
         const messagesDOM = document.getElementById('chat-'+props.id);
-        console.log('chat-'+props.id);
-        console.log(messagesDOM);
         if (messagesDOM) {
             messagesDOM.scrollTop = messagesDOM.scrollHeight;
         }
@@ -73,9 +70,7 @@ export default function Chat(props) {
         }
     }
 
-
-    // TODO: Add socket.io to chat
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         // Subscribe to socketIO chat
         console.log('connecting');
         const socket = io.connect(auth.domain,{

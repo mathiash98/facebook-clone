@@ -1,7 +1,13 @@
+.squareAspect {
+    position: relative;
+    padding-bottom: 100%;
+    overflow: hidden;
+}
 .avatar {
+    position: absolute;
+    object-fit: cover;
+    border-radius: 50%;
+    object-position: center center;
     max-width: 100%;
     height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    object-position: center center;
 }
