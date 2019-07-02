@@ -49,7 +49,7 @@ router.post('/', auth.isLoggedIn, function (req, res) {
     req.body.userId = req.user.id; // Send userId to the new post
     Post.save(req.body)
     .then(data => {
-        res.json(data);
+        res.send('Successfully added post.');
     })
     .catch(err => {
         console.error(err)

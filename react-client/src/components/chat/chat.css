@@ -7,11 +7,11 @@
     padding: 2px;
     display: flex;
     flex-direction: row;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 .chat-header span {
-    flex-grow: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .chat-header button {
     align-self: flex-end;
