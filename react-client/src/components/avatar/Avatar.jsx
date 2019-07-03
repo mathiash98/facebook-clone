@@ -19,7 +19,7 @@ export default function Avatar(props) {
         return (
             <div className="squareAspect">
                 <FontAwesomeIcon icon={['far', 'user']}
-                className="avatar"
+                className="img avatar"
                 size="lg"></FontAwesomeIcon>
             </div>
         )

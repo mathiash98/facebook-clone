@@ -1,5 +1,5 @@
 .chat {
-    width: 150px;
+    width: 190px;
     border-radius: .25rem;
 }
 
@@ -22,7 +22,7 @@
 }
 
 .chat-body {
-    height: 200px;
+    height: 250px;
     display: flex;
     flex-direction: column;
     padding: 0;
